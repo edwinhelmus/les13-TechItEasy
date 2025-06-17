@@ -17,27 +17,27 @@ import static nl.novi.TechItEasy.util.RestUtil.constructURI;
 @RequestMapping("/televisions")
 public class TelevisionController {
 
-    private final TelevisionRepository repos;
+    private final TelevisionRepository televisionRepository;
 
 
     public TelevisionController(TelevisionRepository repos) {
-        this.repos = repos;
+        this.televisionRepository = repos;
     }
 
     @GetMapping
     public ResponseEntity<List<Television>> getAllTelevisions(@RequestParam(value = "brand", required = false) String brand) {
         List<Television> televisions;
         if (brand == null) {
-            televisions = repos.findAll();
+            televisions = televisionRepository.findAll();
         } else {
-            televisions = repos.findAllTelevisionsByBrandEqualsIgnoreCase(brand);
+            televisions = televisionRepository.findAllTelevisionsByBrandEqualsIgnoreCase(brand);
         }
         return ResponseEntity.ok().body(televisions);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Television> getTelevision(@PathVariable("id") long id) {
-        Optional<Television> op = repos.findById(id);
+        Optional<Television> op = televisionRepository.findById(id);
         if (op.isPresent()) {
             return ResponseEntity.ok(op.get());
         } else {
@@ -50,14 +50,14 @@ public class TelevisionController {
         if (television.getName().length() > 20) {
             throw new InvalidTitle("Name must contain at most 20 characters");
         }
-        Television returnTelevision = this.repos.save(television);
+        Television returnTelevision = this.televisionRepository.save(television);
         return ResponseEntity.created(constructURI(television.getId())).body(returnTelevision);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateTelevision(@PathVariable long id, @RequestBody Television television) {
 
-        Optional<Television> op = repos.findById(id);
+        Optional<Television> op = televisionRepository.findById(id);
         if (op.isPresent()) {
             Television television1 = op.get();
             television1.setAmbiLight(television.getAmbiLight());
@@ -78,7 +78,7 @@ public class TelevisionController {
             television1.setVoiceControl(television.getVoiceControl());
             television1.setWifi(television.getWifi());
 
-            Television returnTelevision = repos.save(television1);
+            Television returnTelevision = televisionRepository.save(television1);
             return ResponseEntity.ok().body(returnTelevision);
         } else {
             return ResponseEntity.notFound().build();
@@ -89,9 +89,9 @@ public class TelevisionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTelevision(@PathVariable("id") long id) {
 
-        Optional<Television> op = repos.findById(id);
+        Optional<Television> op = televisionRepository.findById(id);
         if (op.isPresent()) {
-            this.repos.deleteById(id);
+            this.televisionRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -100,7 +100,7 @@ public class TelevisionController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Television> updatePartialTelevision(@PathVariable Long id, @RequestBody Television newTelevision) {
-        Optional<Television> television = repos.findById(id);
+        Optional<Television> television = televisionRepository.findById(id);
 
         if (television.isEmpty()) {
             throw new RecordNotFoundException("No television found with id: " + id);
@@ -155,7 +155,7 @@ public class TelevisionController {
                 television1.setWifi(newTelevision.getWifi());
             }
 
-            Television returnTelevision = repos.save(television1);
+            Television returnTelevision = televisionRepository.save(television1);
             return ResponseEntity.ok().body(returnTelevision);
         }
     }
