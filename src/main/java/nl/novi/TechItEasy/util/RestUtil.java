@@ -1,11 +1,10 @@
-package nl.novi.TechItEasy.controllers;
+package nl.novi.TechItEasy.util;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-abstract class Common {
-
+public class RestUtil {
     public static URI constructURI(Long id) {
         URI uri = URI.create(
                 ServletUriComponentsBuilder.
@@ -13,4 +12,5 @@ abstract class Common {
                         path("/" + id).toUriString());
         return uri;
     }
+
 }

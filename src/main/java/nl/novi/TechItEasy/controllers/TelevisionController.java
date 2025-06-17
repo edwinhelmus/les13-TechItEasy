@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static nl.novi.TechItEasy.controllers.Common.constructURI;
+import static nl.novi.TechItEasy.util.RestUtil.constructURI;
+
 
 @RestController
 @RequestMapping("/televisions")
