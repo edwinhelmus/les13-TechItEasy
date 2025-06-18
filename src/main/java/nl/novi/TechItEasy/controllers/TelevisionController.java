@@ -40,16 +40,14 @@ public class TelevisionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TelevisionResponseDto> getTelevision(@PathVariable("id") long id) {
-        Television television = this.televisionService.getSingleTelevision(id);
-        TelevisionResponseDto televisionResponseDto = TelevisionMapper.toResponseDto(television);
-        return ResponseEntity.ok(televisionResponseDto);
+        TelevisionResponseDto responseDto = this.televisionService.getSingleTelevision(id);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping
     public ResponseEntity<TelevisionResponseDto> addTelevision(@Valid @RequestBody TelevisionRequestDto televisionRequestDto) {
-        Television television = this.televisionService.createTelevision(televisionRequestDto);
-        TelevisionResponseDto televisionResponseDto = TelevisionMapper.toResponseDto(television);
-        return ResponseEntity.created(constructURI(television.getId())).body(televisionResponseDto);
+        TelevisionResponseDto responseDto = this.televisionService.createTelevision(televisionRequestDto);
+        return ResponseEntity.created(constructURI(responseDto.id)).body(responseDto);
     }
 
 //    @PutMapping("/{id}")
@@ -84,17 +82,11 @@ public class TelevisionController {
 //    }
 //
 //
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Object> deleteTelevision(@PathVariable("id") long id) {
-//
-//        Optional<Television> op = televisionRepository.findById(id);
-//        if (op.isPresent()) {
-//            this.televisionRepository.deleteById(id);
-//            return ResponseEntity.noContent().build();
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TelevisionResponseDto> deleteTelevision(@PathVariable("id") long id) {
+        this.televisionService.deleteTelevision(id);
+        return ResponseEntity.noContent().build();
+    }
 //
 //    @PatchMapping("/{id}")
 //    public ResponseEntity<Television> updatePartialTelevision(@PathVariable Long id, @RequestBody Television newTelevision) {

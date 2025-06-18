@@ -6,6 +6,7 @@ import nl.novi.TechItEasy.exceptions.ResourceNotFoundException;
 import nl.novi.TechItEasy.mappers.TelevisionMapper;
 import nl.novi.TechItEasy.models.Television;
 import nl.novi.TechItEasy.repositories.TelevisionRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,13 +22,15 @@ public class TelevisionService {
     }
 
 
-    public Television createTelevision(TelevisionRequestDto televisionRequestDto) {
-        return this.televisionRepository.save(TelevisionMapper.toEntity(televisionRequestDto));
+    public TelevisionResponseDto createTelevision(TelevisionRequestDto televisionRequestDto) {
+        Television television = this.televisionRepository.save(TelevisionMapper.toEntity(televisionRequestDto));
+        return TelevisionMapper.toResponseDto(television);
     }
 
-    public Television getSingleTelevision(Long id) {
-        return this.televisionRepository.findById(id)
+    public TelevisionResponseDto getSingleTelevision(Long id) {
+         Television television = this.televisionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Television " + id + " not found"));
+        return TelevisionMapper.toResponseDto(television);
     }
 
     public List<TelevisionResponseDto> getAllTelevisions() {
@@ -39,7 +42,6 @@ public class TelevisionService {
         return responseDtos;
     }
 
-
     public List<TelevisionResponseDto> getAllTelevisionsByBrand(String brand) {
         List<Television> televisions = this.televisionRepository.findAllTelevisionsByBrandEqualsIgnoreCase(brand);
         List<TelevisionResponseDto> responseDtos = new ArrayList<>();
@@ -47,6 +49,13 @@ public class TelevisionService {
             responseDtos.add(TelevisionMapper.toResponseDto(t));
         }
         return responseDtos;
+    }
+
+    public void deleteTelevision(Long id) {
+        Television television = this.televisionRepository.findById(id)
+              .orElseThrow(() -> new ResourceNotFoundException("Television " + id + " not found"));
+        this.televisionRepository.deleteById(id);
+        return;
     }
 
 
