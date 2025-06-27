@@ -8,7 +8,6 @@ public class TelevisionMapper {
 
     public static Television toEntity(TelevisionRequestDto televisionRequestDto) {
         Television television = new Television();
-        television.setId(televisionRequestDto.id);
         television.setType(televisionRequestDto.type);
         television.setBrand(televisionRequestDto.brand);
         television.setName(televisionRequestDto.name);

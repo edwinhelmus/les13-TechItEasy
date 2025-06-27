@@ -6,7 +6,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public class TelevisionRequestDto {
-    public Long id;
     @Size(min=3, max=32)
     public String type;
     @Size(min=3, max=32)
